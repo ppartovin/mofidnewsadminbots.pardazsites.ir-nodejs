@@ -1,0 +1,184 @@
+{
+  "classes": {
+    "10_Humanities": {
+      "class_name_fa": "دهم انسانی",
+      "schedule": {
+        "Saturday": [
+          { "period": 1, "subject": "عربی" },
+          { "period": 2, "subject": "علوم و فنون" },
+          { "period": 3, "subject": "آزمون" },
+          { "period": 4, "subject": "علوم و فنون" },
+          { "period": 5, "subject": "ورزش" },
+          { "period": 6, "subject": "علوم و فنون" }
+        ],
+        "Sunday": [
+          { "period": 1, "subject": "زبان" },
+          { "period": 2, "subject": "عربی" },
+          { "period": 3, "subject": "ریاضی انسانی" },
+          { "period": 4, "subject": "ریاضی انسانی" },
+          { "period": 5, "subject": "نگارش" },
+          { "period": 6, "subject": "مشاوره" }
+        ],
+        "Monday": [
+          { "period": 1, "subject": "منطق" },
+          { "period": 2, "subject": "تاریخ" },
+          { "period": 3, "subject": "منطق" },
+          { "period": 4, "subject": "تاریخ" },
+          { "period": 5, "subject": "قلمستان" },
+          { "period": 6, "subject": "قلمستان" }
+        ],
+        "Tuesday": [
+          { "period": 1, "subject": "اقتصاد" },
+          { "period": 2, "subject": "اقتصاد" },
+          { "period": 3, "subject": "ورزش" },
+          { "period": 4, "subject": "ریاضی انسانی" },
+          { "period": 5, "subject": "دینی" },
+          { "period": 6, "subject": "دینی" }
+        ],
+        "Wednesday": [
+          { "period": 1, "subject": "ریاضی تکمیلی" },
+          { "period": 2, "subject": "فارسی" },
+          { "period": 3, "subject": "فارسی" },
+          { "period": 4, "subject": "جغرافی" },
+          { "period": 5, "subject": "جامعه‌شناسی" },
+          { "period": 6, "subject": "جامعه‌شناسی" }
+        ]
+      }
+    },
+    "10_B": {
+      "class_name_fa": "دهم ب",
+      "schedule": {
+        "Saturday": [
+          { "period": 1, "subject": "آزمون" },
+          { "period": 2, "subject": "هندسه" },
+          { "period": 3, "subject": "ریاضی جدید" },
+          { "period": 4, "subject": "کلاس انتخابی" },
+          { "period": 5, "subject": "سواد رسانه ایی" },
+          { "period": 6, "subject": "ورزش" }
+        ],
+        "Sunday": [
+          { "period": 1, "subject": "فیزیک" },
+          { "period": 2, "subject": "دینی" },
+          { "period": 3, "subject": "فارسی" },
+          { "period": 4, "subject": "نگارش" },
+          { "period": 5, "subject": "فیزیک" },
+          { "period": 6, "subject": "دینی" }
+        ],
+        "Monday": [
+          { "period": 1, "subject": "عربی" },
+          { "period": 2, "subject": "شیمی" },
+          { "period": 3, "subject": "عربی" },
+          { "period": 4, "subject": "جغرافی" },
+          { "period": 5, "subject": "شیمی" },
+          { "period": 6, "subject": "جبر" }
+        ],
+        "Tuesday": [
+          { "period": 1, "subject": "هندسه" },
+          { "period": 2, "subject": "زبان" },
+          { "period": 3, "subject": "هندسه" },
+          { "period": 4, "subject": "ورزش" },
+          { "period": 5, "subject": "فیزیک" },
+          { "period": 6, "subject": "فیزیک" }
+        ],
+        "Wednesday": [
+          { "period": 1, "subject": "فارسی" },
+          { "period": 2, "subject": "جبر" },
+          { "period": 3, "subject": "شیمی" },
+          { "period": 4, "subject": "ریاضی جدید" },
+          { "period": 5, "subject": "مشاوره" },
+          { "period": 6, "subject": "جبر" }
+        ]
+      }
+    },
+    "10_Experimental": {
+      "class_name_fa": "دهم تجربی",
+      "schedule": {
+        "Saturday": [
+          { "period": 1, "subject": "آزمون" },
+          { "period": 2, "subject": "جبر" },
+          { "period": 3, "subject": "هندسه" },
+          { "period": 4, "subject": "سواد رسانه ایی" },
+          { "period": 5, "subject": "زیست" },
+          { "period": 6, "subject": "کلاس انتخابی/زیست" }
+        ],
+        "Sunday": [
+          { "period": 1, "subject": "دینی" },
+          { "period": 2, "subject": "فارسی" },
+          { "period": 3, "subject": "فیزیک" },
+          { "period": 4, "subject": "دینی" },
+          { "period": 5, "subject": "ریاضی جدید" },
+          { "period": 6, "subject": "فیزیک" }
+        ],
+        "Monday": [
+          { "period": 1, "subject": "جبر" },
+          { "period": 2, "subject": "جغرافی" },
+          { "period": 3, "subject": "شیمی" },
+          { "period": 4, "subject": "عربی" },
+          { "period": 5, "subject": "عربی" },
+          { "period": 6, "subject": "شیمی" }
+        ],
+        "Tuesday": [
+          { "period": 1, "subject": "فیزیک" },
+          { "period": 2, "subject": "ورزش" },
+          { "period": 3, "subject": "فیزیک" },
+          { "period": 4, "subject": "زبان" },
+          { "period": 5, "subject": "هندسه/زیست" },
+          { "period": 6, "subject": "مشاوره" }
+        ],
+        "Wednesday": [
+          { "period": 1, "subject": "شیمی" },
+          { "period": 2, "subject": "ریاضی جدید" },
+          { "period": 3, "subject": "جبر" },
+          { "period": 4, "subject": "فارسی" },
+          { "period": 5, "subject": "نگارش" },
+          { "period": 6, "subject": "ورزش" }
+        ]
+      }
+    },
+    "10_A": {
+      "class_name_fa": "دهم الف",
+      "schedule": {
+        "Saturday": [
+          { "period": 1, "subject": "آزمون" },
+          { "period": 2, "subject": "ریاضی جدید" },
+          { "period": 3, "subject": "سواد رسانه ایی" },
+          { "period": 4, "subject": "هندسه" },
+          { "period": 5, "subject": "کلاس انتخابی" },
+          { "period": 6, "subject": "هندسه" }
+        ],
+        "Sunday": [
+          { "period": 1, "subject": "فارسی" },
+          { "period": 2, "subject": "فیزیک" },
+          { "period": 3, "subject": "دینی" },
+          { "period": 4, "subject": "فیزیک" },
+          { "period": 5, "subject": "دینی" },
+          { "period": 6, "subject": "نگارش" }
+        ],
+        "Monday": [
+          { "period": 1, "subject": "شیمی" },
+          { "period": 2, "subject": "عربی" },
+          { "period": 3, "subject": "جغرافی" },
+          { "period": 4, "subject": "شیمی" },
+          { "period": 5, "subject": "جبر" },
+          { "period": 6, "subject": "عربی" }
+        ],
+        "Tuesday": [
+          { "period": 1, "subject": "ورزش" },
+          { "period": 2, "subject": "فیزیک" },
+          { "period": 3, "subject": "زبان" },
+          { "period": 4, "subject": "فیزیک" },
+          { "period": 5, "subject": "مشاوره" },
+          { "period": 6, "subject": "هندسه" }
+        ],
+        "Wednesday": [
+          { "period": 1, "subject": "جبر" },
+          { "period": 2, "subject": "شیمی" },
+          { "period": 3, "subject": "ریاضی جدید" },
+          { "period": 4, "subject": "جبر" },
+          { "period": 5, "subject": "ورزش" },
+          { "period": 6, "subject": "فارسی" }
+        ]
+      }
+    }
+  }
+}
