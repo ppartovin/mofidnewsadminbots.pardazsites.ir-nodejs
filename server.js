@@ -13,9 +13,10 @@ const app = express();
 const logger = getLogger("webhook");
 const token = (process.env.BALE_BOT_TOKEN || "").trim();
 const apiUrl = `https://tapi.bale.ai/bot${token}`;
+const bale_secret=process.env.BALE_SECRETE;
 app.use(express.json({ limit: "1mb" }));
 
-app.post("/webhook", async (req, res) => {
+app.post(`/webhook/${bale_secret}`, async (req, res) => {
 	const id = requestId();
 	try {
 		const update = asDict(req.body);
