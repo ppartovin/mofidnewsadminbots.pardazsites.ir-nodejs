@@ -1,4 +1,6 @@
 ﻿const express = require("express");
+const fs = require("node:fs");
+const path = require("node:path");
 const { getAiReply } = require("./ai_responder");
 const { getLogger, requestId } = require("./bot_logging");
 const {
@@ -22,6 +24,19 @@ app.post(`/webhook/${bale_secret}`, async (req, res) => {
 		const update = asDict(req.body);
 		const message = asDict(update.message);
 		const chatId = asDict(message.chat).id;
+		const userId = asDict(message.from).id;
+		let acceptedUsers = [];
+		try {
+			acceptedUsers = JSON.parse(fs.readFileSync(path.join(__dirname, 'datas', 'accepted_users.json'), 'utf8'));
+		} catch (e) {
+			logger.error(`Could not read datas/accepted_users.json: ${e.message}`);
+		}
+		if (userId == null || !Array.isArray(acceptedUsers) || !acceptedUsers.some((acceptedId) => String(acceptedId) === String(userId))) {
+			if (chatId != null && token) {
+				await baleRequest(apiUrl, 'sendMessage', { chat_id: chatId, text: 'شما ادمین نیستید.' }).catch((e) => logger.error(`Admin rejection send failed: ${e.message}`));
+			}
+			return res.status(200).send('ok');
+		}
 		if (!token) return res.status(500).send("Token is missing");
 		if (chatId == null) return res.status(200).send("ok");
 		const userText = asText(message.text) || asText(message.caption);
