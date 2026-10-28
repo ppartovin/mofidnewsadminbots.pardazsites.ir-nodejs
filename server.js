@@ -16,6 +16,20 @@ const logger = getLogger("webhook");
 const token = (process.env.BALE_BOT_TOKEN || "").trim();
 const apiUrl = `https://tapi.bale.ai/bot${token}`;
 const bale_secret=process.env.BALE_SECRETE;
+const homeworkButtons = [
+	"نوشتن تکالیف امروز برای کانال",
+	"نوشتن تکالیف فردا برای کانال",
+	"نوشتن تکالیف جاری برای کانال",
+];
+const homeworkKeyboard = {
+	keyboard: [
+		[{ text: homeworkButtons[0] }],
+		[{ text: homeworkButtons[1] }],
+		[{ text: homeworkButtons[2] }],
+	],
+	resize_keyboard: true,
+	persistent: true,
+};
 app.use(express.json({ limit: "1mb" }));
 
 app.post(`/webhook/${bale_secret}`, async (req, res) => {
@@ -52,6 +66,7 @@ app.post(`/webhook/${bale_secret}`, async (req, res) => {
 			status = await baleRequest(apiUrl, "sendMessage", {
 				chat_id: chatId,
 				text: "در حال پردازش...",
+				reply_markup: homeworkKeyboard,
 			});
 		} catch (e) {
 			logger.error(`Status send failed: ${e.message}`);
@@ -61,7 +76,7 @@ app.post(`/webhook/${bale_secret}`, async (req, res) => {
 		if (messageId == null) return res.status(200).send("ok");
 		let reply;
 		try {
-			reply = await getAiReply(userText);
+			reply = await getAiReply(userText, String(userId));
 		} catch (e) {
 			logger.error(`AI failed: ${e.stack || e}`);
 			reply = userMessageFor(e);
