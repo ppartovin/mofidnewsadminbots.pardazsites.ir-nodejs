@@ -1,7 +1,7 @@
 ﻿const express = require("express");
 const fs = require("node:fs");
 const path = require("node:path");
-const { getAiReply } = require("./ai_responder");
+const { getAiReply, cleanupExpiredAssignments } = require("./ai_responder");
 const { getLogger, requestId } = require("./bot_logging");
 const {
 	asDict,
@@ -113,6 +113,11 @@ app.get("/", (_req, res) => res.status(200).send("Bot is running"));
 
 const port = Number(process.env.PORT || 5000);
 
+// Cleans expired assignments immediately and repeats hourly while the bot is running.
+// Step 1: Run one cleanup as the server starts.
+// Step 2: Repeat cleanup hourly so expired records are removed without a user message.
+cleanupExpiredAssignments();
+setInterval(cleanupExpiredAssignments, 60 * 60 * 1000);
 
 app.listen(port, "0.0.0.0", () =>
 	logger.info(`Express server listening on ${port}`),

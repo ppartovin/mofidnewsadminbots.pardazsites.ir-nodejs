@@ -21,6 +21,83 @@ If the user's message is exactly one of these Bale homework buttons, create one 
 
 The supplied today value and due_date values are both Solar Hijri (Jalali) dates for Asia/Tehran. Compare them as dates in the same calendar, and determine tomorrow as the next Tehran calendar day. Do not convert them to Gregorian or mix calendar systems. This file schema represents assignments only: it has no explicit record type, exam date, event date, or announcement date, so do not invent exams/events or classify an assignment as an exam/event. In the output, use title, subject, description, due_date, and optionally priority when useful; do not expose internal id unless useful for disambiguation. If no record matches, say so briefly. This is a draft returned privately to the requesting user; do not claim it was published to a channel.`;
 
+// Removes assignment records with valid Jalali due dates earlier than today and saves the filtered array.
+// Step 1: Leave non-array data unchanged because the configured assignment file is expected to be an array.
+// Step 2: Build today's zero-padded Solar Hijri date in the Asia/Tehran timezone.
+// Step 3: Normalize supported date digits and separators, removing only valid dates strictly before today.
+// Step 4: Atomically write the filtered array only when one or more records were removed.
+function removeExpiredAssignments(data, filePath) {
+	if (!Array.isArray(data)) return data;
+
+	const todayParts = new Intl.DateTimeFormat("fa-IR-u-ca-persian-nu-latn", {
+		timeZone: "Asia/Tehran",
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	}).formatToParts(new Date());
+	const todayValues = {};
+	for (const part of todayParts) {
+		if (part.type !== "literal") todayValues[part.type] = part.value;
+	}
+	const today = `${todayValues.year.padStart(4, "0")}-${todayValues.month.padStart(2, "0")}-${todayValues.day.padStart(2, "0")}`;
+	const remaining = [];
+	for (const record of data) {
+		if (!record || typeof record !== "object" || typeof record.due_date !== "string") {
+			remaining.push(record);
+			continue;
+		}
+		let dueDate = "";
+		for (const digit of record.due_date.trim()) {
+			const code = digit.charCodeAt(0);
+			if ((code >= 0x06f0 && code <= 0x06f9) || (code >= 0x0660 && code <= 0x0669)) {
+				dueDate += String(code >= 0x06f0 ? code - 0x06f0 : code - 0x0660);
+			} else {
+				dueDate += digit;
+			}
+		}
+		dueDate = dueDate.replace(/[/.]/g, "-");
+		if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
+			remaining.push(record);
+			continue;
+		}
+		const dateParts = dueDate.split("-");
+		const month = Number(dateParts[1]);
+		const day = Number(dateParts[2]);
+		if (month < 1 || month > 12 || day < 1 || day > 31 || dueDate >= today) {
+			remaining.push(record);
+		}
+	}
+	if (remaining.length === data.length) return data;
+
+	const temp = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+	try {
+		fs.writeFileSync(temp, JSON.stringify(remaining, null, 2) + "\n", "utf8");
+		fs.renameSync(temp, filePath);
+		logger.info(`Removed ${data.length - remaining.length} expired assignment(s)`);
+	} finally {
+		if (fs.existsSync(temp)) fs.rmSync(temp);
+	}
+	return remaining;
+}
+
+// Reads the configured assignment file and removes expired Jalali-dated records.
+// Step 1: Resolve FILE_PATH and log a clear error if it is unavailable.
+// Step 2: Parse the current JSON array and pass it to the expiry filter.
+// Step 3: Catch and log cleanup failures so a scheduled cleanup does not crash the bot.
+function cleanupExpiredAssignments() {
+	const filePath = (process.env.FILE_PATH || "").trim();
+	if (!filePath) {
+		logger.error("Cannot clean expired assignments: FILE_PATH is not configured");
+		return;
+	}
+	try {
+		const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+		removeExpiredAssignments(data, filePath);
+	} catch (e) {
+		logger.error(`Could not clean expired assignments: ${e.message}`);
+	}
+}
+
 // Generates the AI response using the requesting user's optional fixed system prompt.
 // Step 1: Load credentials and the current data and schedule files.
 // Step 2: Read the user's fixed prompt, treating missing or blank entries as empty text.
@@ -40,6 +117,7 @@ async function getAiReply(userText, userId) {
 				"utf8",
 			),
 		);
+		data = removeExpiredAssignments(data, filePath);
 	} catch (e) {
 		throw new Error(`Could not read JSON data: ${e.message}`, { cause: e });
 	}
@@ -101,4 +179,4 @@ async function getAiReply(userText, userId) {
 	}
 	return result.answer;
 }
-module.exports = { getAiReply };
+module.exports = { getAiReply, cleanupExpiredAssignments };
