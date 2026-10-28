@@ -66,7 +66,6 @@ app.post(`/webhook/${bale_secret}`, async (req, res) => {
 			status = await baleRequest(apiUrl, "sendMessage", {
 				chat_id: chatId,
 				text: "در حال پردازش...",
-				reply_markup: homeworkKeyboard,
 			});
 		} catch (e) {
 			logger.error(`Status send failed: ${e.message}`);
@@ -81,11 +80,26 @@ app.post(`/webhook/${bale_secret}`, async (req, res) => {
 			logger.error(`AI failed: ${e.stack || e}`);
 			reply = userMessageFor(e);
 		}
-		await baleRequest(apiUrl, "editMessageText", {
-			chat_id: chatId,
-			message_id: messageId,
-			text: fitBaleText(reply),
-		}).catch((e) => logger.error(`Bale edit failed: ${e.message}`));
+		try {
+			await baleRequest(apiUrl, "sendMessage", {
+				chat_id: chatId,
+				text: fitBaleText(reply),
+				reply_markup: homeworkKeyboard,
+			});
+			await baleRequest(apiUrl, "deleteMessage", {
+				chat_id: chatId,
+				message_id: messageId,
+				reply_markup: homeworkKeyboard,
+			}).catch((e) => logger.error(`Processing message delete failed: ${e.message}`));
+		} catch (e) {
+			logger.error(`Bale final send failed: ${e.message}`);
+			await baleRequest(apiUrl, "editMessageText", {
+				chat_id: chatId,
+				message_id: messageId,
+				reply_markup: homeworkKeyboard,
+				text: fitBaleText(reply),
+			}).catch((editError) => logger.error(`Bale edit fallback failed: ${editError.message}`));
+		}
 		res.status(200).send("ok");
 	} catch (e) {
 		logger.error(
